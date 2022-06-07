@@ -10,6 +10,9 @@ export class Users {
     @Column({default: 0})
     user_id : string;
 
+    @Column({nullable : false})
+    password : string;
+
     @Column({default: 0})
     full_name : string;
 
