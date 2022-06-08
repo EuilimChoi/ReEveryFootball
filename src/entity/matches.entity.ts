@@ -1,22 +1,17 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany} from "typeorm"
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany, ManyToOne} from "typeorm"
+import { Grounds } from "./grounds.entity";
 import {Playerinmatch} from "./playersInMatch.entity"
 
 @Entity()
 export class Matches {
     @PrimaryGeneratedColumn('increment')
-    id: number;
-
-    @Column()
-    match_id : string;
+    public id: number;
 
     @Column()
     time : string;
 
     @Column()
     player : string;
-
-    @Column()
-    location : string;
 
     @Column({default: 0})
     matchgender : number;
@@ -27,7 +22,10 @@ export class Matches {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @OneToMany(() => Playerinmatch, (playerinmatch) => playerinmatch.match_id)
+    @ManyToOne(() =>Grounds, grounds => grounds.id)
+    ground : Grounds
+
+    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.match)
     playerinmatch : Playerinmatch[]
 
 }

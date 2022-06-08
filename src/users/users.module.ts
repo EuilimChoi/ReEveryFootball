@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { Users } from '../entity/users.entity'
+import { Playerinmatch } from '../entity/playersInMatch.entity'
+
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
     imports : [
-        TypeOrmModule.forFeature([Users]),
+        TypeOrmModule.forFeature([Users, Playerinmatch]),
         JwtModule.register({
             secret : '1234',
             signOptions : {expiresIn : '12h'},

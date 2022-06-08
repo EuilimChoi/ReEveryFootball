@@ -6,22 +6,16 @@ import {Matches} from "./matches.entity"
 @Entity()
 export class Playerinmatch {
     @PrimaryGeneratedColumn('increment')
-    id: number;
-
-    @Column()
-    user_id : string;
-
-    @Column()
-    match_id : string;
+    id: Number;
 
     @Column({default: 0})
-    goal : number;
+    goal : Number;
 
     @Column({default: 0})
-    shooting : number;
+    shooting : Number;
 
     @Column({default: 0})
-    assist : number;
+    assist : Number;
 
     @Column({default: false})
     win : string;
@@ -32,9 +26,9 @@ export class Playerinmatch {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @ManyToOne(()=>Users, (users) => users.user_id , { nullable: false, onDelete: 'CASCADE' })
-    users : Users
+    @ManyToOne(()=>Users, user => user.user_id , { nullable: false, onDelete: 'CASCADE', })
+    user : Users
 
-    @ManyToOne(()=>Matches, (matches) => matches.match_id , { nullable: false, onDelete: 'CASCADE' })
-    matches : Matches
+    @ManyToOne(()=>Matches, (matches) => matches.id , { nullable: false, onDelete: 'CASCADE' })
+    match : Matches
 }

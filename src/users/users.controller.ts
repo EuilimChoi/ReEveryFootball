@@ -1,5 +1,4 @@
 import { Controller, Get, Post, Body,Patch,Delete,Req,Res } from '@nestjs/common';
-import { Users } from 'src/entity/users.entity';
 import {signinDto,userloginDto} from './dto/user.dto'
 import {UsersService} from './users.service'
 import { Response, Request } from 'express';

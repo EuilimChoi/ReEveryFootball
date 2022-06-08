@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Users } from '../entity/users.entity';
+import {Playerinmatch} from '../entity/playersInMatch.entity'
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
@@ -10,6 +11,10 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
+    
+    @InjectRepository(Playerinmatch)
+    private playerInMatchRepository: Repository<Playerinmatch>,
+
     private jwtService: JwtService
   ){}
 
@@ -95,11 +100,13 @@ export class UsersService {
     const token = header.rawHeaders[1].split(" ")[1]
     const verify = this.jwtService.verify(token, {secret: "1234"})
     const targetuser = await this.usersRepository.findOne({user_id : verify.user_id})
-
+    const targetmatch = await this.playerInMatchRepository.find({user : verify.user_id})
     if(!targetuser){
       throw new HttpException('유효하지 않은 정보입니다. 다시 로그인해주세요', HttpStatus.BAD_REQUEST)
     }else{
-      return targetuser
+      return {targetuser,targetmatch}
     }
   }
+
+
 }

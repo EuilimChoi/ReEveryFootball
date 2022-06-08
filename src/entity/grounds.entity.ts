@@ -5,6 +5,7 @@ import {Matches} from "./matches.entity"
 @Entity()
 export class Grounds {
     @PrimaryGeneratedColumn('increment')
+    @OneToMany(() => Matches, (matches) => matches.ground)
     id: number;
 
     @Column()
@@ -28,8 +29,6 @@ export class Grounds {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @OneToMany(() => Matches, (matches) => matches.id)
-    matches : Matches[]
     
 
 

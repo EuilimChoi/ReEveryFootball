@@ -5,52 +5,52 @@ import {Playerinmatch} from "./playersInMatch.entity"
 @Entity()
 export class Users {
     @PrimaryGeneratedColumn('increment')
-    id: number;
-
-    @Column({default: 0})
-    user_id : string;
+    id: Number;
 
     @Column({nullable : false})
-    password : string;
+    user_id : String;
+
+    @Column({nullable : false})
+    password : String;
+
+    @Column({nullable : false})
+    full_name : String;
+
+    @Column({nullable : false})
+    email : String;
+
+    @Column({nullable : true})
+    nickname : String;
 
     @Column({default: 0})
-    full_name : string;
+    total_goal : Number;
 
     @Column({default: 0})
-    email : string;
+    total_shoot : Number;
 
     @Column({default: 0})
-    nickname : string;
-
-    @Column({default: 0})
-    total_goal : number;
-
-    @Column({default: 0})
-    total_shoot : number;
-
-    @Column({default: 0})
-    total_assist : number;
+    total_assist : Number;
     
     @Column({default: 0})
-    total_win : number;
+    total_win : Number;
     
     @Column({default: 0})
-    perfer_time : number;
+    perfer_time : Number;
 
     @Column({default: 0})
-    perfer_location : number;
+    perfer_location : Number;
     
     @Column({default: 0})
-    penalty : number;
+    penalty : Number;
     
     @Column({default: false})
-    admin : boolean;
+    admin : Boolean;
     
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @OneToMany(() => Playerinmatch, (playerinmatch) => playerinmatch.user_id)
-    playerinmatch : Playerinmatch[]
+    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.user)
+    playerinmatch : Playerinmatch[];
 
 }
 
