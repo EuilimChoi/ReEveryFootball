@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany, ManyToOne} from "typeorm"
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany, ManyToOne, JoinColumn} from "typeorm"
 import { Grounds } from "./grounds.entity";
 import {Playerinmatch} from "./playersInMatch.entity"
 
@@ -22,10 +22,14 @@ export class Matches {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @ManyToOne(() =>Grounds, grounds => grounds.id)
+    @Column({ nullable: true })
+    groundId: number;
+    
+    @ManyToOne(() =>Grounds, grounds => grounds.id, {eager:true})
     ground : Grounds
 
-    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.match)
+    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.id)
     playerinmatch : Playerinmatch[]
+
 
 }

@@ -21,4 +21,9 @@ export class MatchController {
   getMatchinfo(@Param('matchId') matchId: Number) : any {
     return this.matchservice.getMatchinfo(matchId);
   }
+
+  @Get('/getmatchlist')
+  getMatchList() : any {
+    return this.matchservice.getMatchList()
+  }
 }

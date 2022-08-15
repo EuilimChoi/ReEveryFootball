@@ -8,6 +8,7 @@ import { Matches } from 'src/entity/matches.entity';
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
+import { get } from 'http';
 
 
 
@@ -34,49 +35,39 @@ export class MatchService {
     return 'this is match';
   }
 
-  async joinmatch(header,matchId : Number) : Promise<any> {
+  async joinmatch(header, matchId) : Promise<any> {
 
     const token = header.rawHeaders[1].split(" ")[1]
     const verify = await this.jwtService.verify(token, {secret: "1234"})
     const getuser = await this.usersRepository.findOne({user_id : verify.user_id})
 
+    console.log(getuser)
 
+    await this.playerInMatchRepository.save({
+      match : matchId,
+      userid : verify.id
+    })
 
-    const userinfo = {
-      userId : "sdfsdfgggg", 
-      matchId : 3,
-      goal : 99,
-      assist : 99,
-      shooting : 99,
-    }
-
-      console.log(userinfo)
-      await this.playerInMatchRepository.save(userinfo)
-
-      return {message : `${matchId}에 참가하셨습니다.`}
-
-
-
-
-    // async function checkUserAlreadyJoinThisMatchAndJoin(){
-    //   const checkRoom = await this.playerInMatchRepository.find({user_id : verify.user_id, matchesId : matchId})
-    //   checkRoom ? {message : "이미 참가하셨습니다"} : joinThisMatch()
-    // }
-    
-    // checkUserAlreadyJoinThisMatchAndJoin()
+    return {message : `${matchId}에 참가하셨습니다.`}
   }
 
   async getMatchinfo(matchId): Promise <any> {
 
-      const findmatch = await this.matchesRepository.findOne({id : matchId})
-      //const getGroundinfo = await this.groundRepository.findOne({id : findmatch.ground})
-      console.log(findmatch)
-      const getJoinedPlayer = await this.playerInMatchRepository.find({match : matchId})
+    const findmatch = await this.matchesRepository.findOne({id : matchId})
+    console.log(findmatch)
+    const getGroundinfo = await this.groundRepository.findOne({id : findmatch.groundId})
+    const getJoinedPlayer = await this.playerInMatchRepository.find({matchId : matchId})
 
-      // return {matchinfo : {
-      //   Groundinfo : getGroundinfo,
-      //   JoinedPlayer : getJoinedPlayer
-      // }}
+    return {
+      matchinfo : findmatch,
+      Groundinfo : getGroundinfo,
+      JoinedPlayer : getJoinedPlayer
+    }
+  }
 
+  async getMatchList() : Promise <any>{
+    const findmatch = await this.matchesRepository.find()
+    return findmatch
   }
 }
+

@@ -26,8 +26,14 @@ export class Playerinmatch {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
+    @Column({ nullable: true })
+    userId: number;
+
+    @Column({ nullable: true })
+    matchId: number;
+
     @ManyToOne(()=>Users, user => user.user_id , { nullable: false, onDelete: 'CASCADE', })
-    user : Users
+    userid : Users
 
     @ManyToOne(()=>Matches, (matches) => matches.id , { nullable: false, onDelete: 'CASCADE' })
     match : Matches

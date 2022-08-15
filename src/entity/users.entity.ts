@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany} from "typeorm"
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany, BeforeInsert} from "typeorm"
 import {Playerinmatch} from "./playersInMatch.entity"
 
 
@@ -49,7 +49,7 @@ export class Users {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 
-    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.user)
+    @OneToMany(() => Playerinmatch, playerinmatch => playerinmatch.id)
     playerinmatch : Playerinmatch[];
 
 }

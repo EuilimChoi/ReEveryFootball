@@ -5,6 +5,7 @@ import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
 import { signinDto, userloginDto } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +23,7 @@ export class UsersService {
     return 'Hello ReEveryfootball!';
   }
     
-  async signin(users) : Promise <Object> {
+  async signin(users : signinDto) : Promise <Object> {
       const check_id = await this.usersRepository.findOne({user_id : users.user_id})
       const check_email = await this.usersRepository.findOne({email : users.email})
 
@@ -31,17 +32,18 @@ export class UsersService {
       }else if(check_email){
         throw new HttpException('이메일이 이미 사용 중입니다.', HttpStatus.BAD_REQUEST)
       }else{
+        users.password = await bcrypt.hash(users.password, 10); // 비밀번호 해쉬
         await this.usersRepository.save(users)
         return {message : '가입이 완료 되었습니다.'}
       }
   } 
 
-  async login(users) : Promise<{accessToken: string} | undefined>{
+  async login(users: userloginDto) : Promise<{accessToken: string} | undefined>{
     const check_id = await this.usersRepository.findOne({user_id : users.user_id})
-    const check_password = await this.usersRepository.findOne({user_id : users.user_id, password : users.password})
+    const pass = await bcrypt.compare(users.password.toString(), check_id.password.toString())
     if(check_id){
-      if(check_password){
-        const payload = {user_id : check_id.user_id, email : check_id.email}
+      if(pass){
+        const payload = {id: check_id.id, user_id : check_id.user_id, email : check_id.email}
         return {accessToken: this.jwtService.sign(payload)}
         
       }else{
@@ -100,7 +102,7 @@ export class UsersService {
     const token = header.rawHeaders[1].split(" ")[1]
     const verify = this.jwtService.verify(token, {secret: "1234"})
     const targetuser = await this.usersRepository.findOne({user_id : verify.user_id})
-    const targetmatch = await this.playerInMatchRepository.find({user : verify.user_id})
+    const targetmatch = await this.playerInMatchRepository.find({userid : verify.id})
     if(!targetuser){
       throw new HttpException('유효하지 않은 정보입니다. 다시 로그인해주세요', HttpStatus.BAD_REQUEST)
     }else{
