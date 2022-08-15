@@ -6,6 +6,7 @@ import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
 import { signinDto, userloginDto } from './dto/user.dto';
 
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -25,7 +26,7 @@ export class UsersService {
   async signin(users) : Promise <Object> {
       const check_id = await this.usersRepository.findOne({user_id : users.user_id})
       const check_email = await this.usersRepository.findOne({email : users.email})
-
+      console.log("")
       if(check_id){
         throw new HttpException('아이디가 이미 사용 중입니다.', HttpStatus.BAD_REQUEST)
       }else if(check_email){
