@@ -19,7 +19,7 @@ export class signinDto{
     readonly user_id : string;
 
     @IsString()
-    readonly password : string;
+    password : string;
 
     @IsString()
     readonly nickname : string;
