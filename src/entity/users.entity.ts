@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany, BeforeInsert} from "typeorm"
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,OneToMany} from "typeorm"
 import {Playerinmatch} from "./playersInMatch.entity"
 
 

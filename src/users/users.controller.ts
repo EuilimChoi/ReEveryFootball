@@ -15,7 +15,7 @@ export class UsersController {
     }
 
     @Post('/signin')
-    async signin(@Body() user : signinDto) : Promise <Object> {
+    async signin(@Body() user : any) : Promise <Object> {
         return this.usersService.signin(user);
     }
 

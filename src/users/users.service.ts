@@ -5,7 +5,6 @@ import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
 import { signinDto, userloginDto } from './dto/user.dto';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +22,7 @@ export class UsersService {
     return 'Hello ReEveryfootball!';
   }
     
-  async signin(users : signinDto) : Promise <Object> {
+  async signin(users) : Promise <Object> {
       const check_id = await this.usersRepository.findOne({user_id : users.user_id})
       const check_email = await this.usersRepository.findOne({email : users.email})
 
@@ -32,17 +31,16 @@ export class UsersService {
       }else if(check_email){
         throw new HttpException('이메일이 이미 사용 중입니다.', HttpStatus.BAD_REQUEST)
       }else{
-        users.password = await bcrypt.hash(users.password, 10); // 비밀번호 해쉬
         await this.usersRepository.save(users)
         return {message : '가입이 완료 되었습니다.'}
       }
   } 
 
-  async login(users: userloginDto) : Promise<{accessToken: string} | undefined>{
+  async login(users) : Promise<{accessToken: string} | undefined>{
     const check_id = await this.usersRepository.findOne({user_id : users.user_id})
-    const pass = await bcrypt.compare(users.password.toString(), check_id.password.toString())
+    const check_password = await this.usersRepository.findOne({user_id : users.user_id, password : users.password})
     if(check_id){
-      if(pass){
+      if(check_password){
         const payload = {id: check_id.id, user_id : check_id.user_id, email : check_id.email}
         return {accessToken: this.jwtService.sign(payload)}
         
