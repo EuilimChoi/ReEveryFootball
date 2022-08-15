@@ -11,13 +11,13 @@ export class Matches {
     time : string;
 
     @Column()
-    player : string;
+    player : number;
 
-    @Column({default: 0})
-    matchgender : number;
+    @Column()
+    matchgender : string;
 
-    @Column({default: 0})
-    score : number;
+    @Column({default: "0:0"})
+    score : string;
     
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;

@@ -5,10 +5,10 @@ import {Playerinmatch} from 'src/entity/playersInMatch.entity'
 import { Grounds } from 'src/entity/grounds.entity';
 import { Matches } from 'src/entity/matches.entity';
 
+import {MatchMakingDto,GroundInfoDto} from 'src/match/dto/match.dto'
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
-import { get } from 'http';
 
 
 
@@ -35,7 +35,7 @@ export class MatchService {
     return 'this is match';
   }
 
-  async joinmatch(header, matchId) : Promise<any> {
+  async joinmatch(header, matchId) : Promise<Object>{
 
     const token = header.rawHeaders[1].split(" ")[1]
     const verify = await this.jwtService.verify(token, {secret: "1234"})
@@ -51,7 +51,7 @@ export class MatchService {
     return {message : `${matchId}에 참가하셨습니다.`}
   }
 
-  async getMatchinfo(matchId): Promise <any> {
+  async getMatchinfo(matchId): Promise <Object> {
 
     const findmatch = await this.matchesRepository.findOne({id : matchId})
     console.log(findmatch)
@@ -65,9 +65,29 @@ export class MatchService {
     }
   }
 
-  async getMatchList() : Promise <any>{
+  async getMatchList() : Promise <Object>{
     const findmatch = await this.matchesRepository.find()
     return findmatch
+  }
+
+  async makeMatch(matchInfo:MatchMakingDto) : Promise<Object|string> {
+    try{
+      await this.matchesRepository.save(matchInfo)
+    }catch(e){
+      console.log(e)
+      return new HttpException('ERR! 다시 시도해주세요.',HttpStatus.BAD_REQUEST)
+    }
+    return {"status": 200, "matchinfo" : {matchInfo}}
+  }
+
+  async makeGround(groundInfo:GroundInfoDto) : Promise<Object> {
+    try{
+      await this.groundRepository.save(groundInfo)
+    }catch(e){
+      console.log(e)
+      return new HttpException('ERR! 다시 시도해주세요.',HttpStatus.BAD_REQUEST)
+    }
+    return {"status": 200, "groundInfo" : {groundInfo}}
   }
 }
 

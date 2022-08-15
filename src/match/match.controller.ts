@@ -1,4 +1,4 @@
-import { Get,Post,Param,Req  } from '@nestjs/common';
+import { Get,Post,Param,Req, Body  } from '@nestjs/common';
 import { Controller } from '@nestjs/common';
 import { MatchService} from "./match.service"
 import { Response, Request } from 'express';
@@ -25,5 +25,15 @@ export class MatchController {
   @Get('/getmatchlist')
   getMatchList() : any {
     return this.matchservice.getMatchList()
+  }
+
+  @Post('/makematch')
+  makeMatch(@Body() matchInfo) : Promise <Object> {
+    return this.matchservice.makeMatch(matchInfo)
+  }
+
+  @Post('/makeground')
+  makeGround(@Body() groundInfo) : Promise <Object> {
+    return this.matchservice.makeGround(groundInfo)
   }
 }
