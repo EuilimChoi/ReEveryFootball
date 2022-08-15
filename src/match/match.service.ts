@@ -71,6 +71,10 @@ export class MatchService {
   }
 
   async makeMatch(matchInfo:MatchMakingDto) : Promise<Object|string> {
+    const checkMatch = await this.matchesRepository.findOne({groundId : matchInfo.groundId, time: matchInfo.time})
+    if (checkMatch){
+      throw new HttpException('이미 등록된 경기 입니다.', HttpStatus.BAD_REQUEST)
+    }
     try{
       await this.matchesRepository.save(matchInfo)
     }catch(e){
@@ -81,6 +85,11 @@ export class MatchService {
   }
 
   async makeGround(groundInfo:GroundInfoDto) : Promise<Object> {
+    const checkGround = await this.groundRepository.findOne({ground_name : groundInfo.ground_name, ground_location : groundInfo.ground_location})
+    if (checkGround){
+      throw new HttpException('이미 등록된 구장 입니다.', HttpStatus.BAD_REQUEST)
+    }
+
     try{
       await this.groundRepository.save(groundInfo)
     }catch(e){
