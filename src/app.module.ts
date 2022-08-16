@@ -10,6 +10,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { MatchService } from './match/match.service';
 import { MatchModule } from './match/match.module';
 import { MatchController } from './match/match.controller';
+import { GroundController } from './ground/ground.controller';
+import { GroundService } from './ground/ground.service';
+import { GroundModule } from './ground/ground.module';
 
 @Module({
   imports: [
@@ -21,9 +24,10 @@ import { MatchController } from './match/match.controller';
       secret: '1234',
       signOptions: {expiresIn: '12h'},
   }),
-    MatchModule
+    MatchModule,
+    GroundModule
   ],
-  controllers: [AppController, UsersController, MatchController],
-  providers: [AppService, UsersService, MatchService],
+  controllers: [AppController, UsersController, MatchController, GroundController],
+  providers: [AppService, UsersService, MatchService, GroundService],
 })
 export class AppModule {}

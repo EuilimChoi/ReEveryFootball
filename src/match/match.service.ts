@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Param, UnauthorizedException,Req } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable} from '@nestjs/common';
 
 import { Users } from 'src/entity/users.entity';
 import {Playerinmatch} from 'src/entity/playersInMatch.entity'
@@ -51,11 +51,10 @@ export class MatchService {
     return {message : `${matchId}에 참가하셨습니다.`}
   }
 
-  async getMatchinfo(matchId): Promise <Object> {
+  async getMatchinfo(matchId:number): Promise <Object> {
 
     const findmatch = await this.matchesRepository.findOne({id : matchId})
-    console.log(findmatch)
-    const getGroundinfo = await this.groundRepository.findOne({id : findmatch.groundId})
+    const getGroundinfo = await this.groundRepository.findOne({id: findmatch.groundId})
     const getJoinedPlayer = await this.playerInMatchRepository.find({matchId : matchId})
 
     return {
@@ -82,21 +81,6 @@ export class MatchService {
       return new HttpException('ERR! 다시 시도해주세요.',HttpStatus.BAD_REQUEST)
     }
     return {"status": 200, "matchinfo" : {matchInfo}}
-  }
-
-  async makeGround(groundInfo:GroundInfoDto) : Promise<Object> {
-    const checkGround = await this.groundRepository.findOne({ground_name : groundInfo.ground_name, ground_location : groundInfo.ground_location})
-    if (checkGround){
-      throw new HttpException('이미 등록된 구장 입니다.', HttpStatus.BAD_REQUEST)
-    }
-
-    try{
-      await this.groundRepository.save(groundInfo)
-    }catch(e){
-      console.log(e)
-      return new HttpException('ERR! 다시 시도해주세요.',HttpStatus.BAD_REQUEST)
-    }
-    return {"status": 200, "groundInfo" : {groundInfo}}
   }
 }
 

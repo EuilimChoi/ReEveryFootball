@@ -13,12 +13,12 @@ export class MatchController {
   }
 
   @Get('/joinmatch/:matchId')
-  joinmatch(@Req() header : Request, @Param('matchId') matchId: Number) : any {
+  joinmatch(@Req() header : Request, @Param('matchId') matchId:number) : any {
     return this.matchservice.joinmatch(header,matchId);
   }
 
   @Get('/getmatchinfo/:matchId')
-  getMatchinfo(@Param('matchId') matchId: Number) : any {
+  getMatchinfo(@Param('matchId') matchId:number) : any {
     return this.matchservice.getMatchinfo(matchId);
   }
 
@@ -32,8 +32,4 @@ export class MatchController {
     return this.matchservice.makeMatch(matchInfo)
   }
 
-  @Post('/makeground')
-  makeGround(@Body() groundInfo) : Promise <Object> {
-    return this.matchservice.makeGround(groundInfo)
-  }
 }
