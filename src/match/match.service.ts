@@ -5,12 +5,10 @@ import {Playerinmatch} from 'src/entity/playersInMatch.entity'
 import { Grounds } from 'src/entity/grounds.entity';
 import { Matches } from 'src/entity/matches.entity';
 
-import {MatchMakingDto,GroundInfoDto} from 'src/match/dto/match.dto'
+import {MatchMakingDto} from 'src/match/dto/match.dto'
 import {InjectRepository} from '@nestjs/typeorm'
 import {Repository} from 'typeorm'
 import { JwtService } from '@nestjs/jwt';
-
-
 
 
 @Injectable()
@@ -81,6 +79,24 @@ export class MatchService {
       return new HttpException('ERR! 다시 시도해주세요.',HttpStatus.BAD_REQUEST)
     }
     return {"status": 200, "matchinfo" : {matchInfo}}
+  }
+
+  async matchResult(result : any) : Promise<Object>{
+    for (const userinfo of result){
+      const findUser = await this.usersRepository.findOne({id :userinfo.id})
+      let {total_goal,total_assist,total_game,total_win,total_shoot} = findUser
+
+      await this. usersRepository.update(
+        {id : userinfo.id},
+        {total_goal : (total_goal * total_game + userinfo.goal)/(total_game+1),
+        total_assist: (total_assist * total_game + userinfo.assist)/(total_game+1),
+        total_shoot : (total_shoot * total_game + userinfo.shoot)/(total_game+1),
+        total_win : userinfo.win ? total_win+1 : total_win,
+        total_game : total_game+1
+        }
+      );
+    }
+    return {message : "working!", result : "done!"}
   }
 }
 

@@ -6,7 +6,7 @@ import {Grounds} from './entity/grounds.entity'
 
 function ormConfig(): TypeOrmModuleOptions {
 	const commonConf = {
-        SYNCRONIZE: true,
+        SYNCRONIZE: false,
         ENTITIES: [Users,Playerinmatch,Matches,Grounds],
         // ENTITIES: [__dirname +'/entity/*.entity.ts'],
         MIGRATIONS: [__dirname + '/migrations/**/*{.ts,.js}'],

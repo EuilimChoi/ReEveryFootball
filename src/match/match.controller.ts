@@ -32,4 +32,9 @@ export class MatchController {
     return this.matchservice.makeMatch(matchInfo)
   }
 
+  @Post('/matchresult')
+  matchResult(@Body() matchResult) : Promise <Object> {
+    return this.matchservice.matchResult(matchResult.result)
+  }
+
 }

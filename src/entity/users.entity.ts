@@ -5,7 +5,7 @@ import {Playerinmatch} from "./playersInMatch.entity"
 @Entity()
 export class Users {
     @PrimaryGeneratedColumn('increment')
-    id: Number;
+    id: number;
 
     @Column({nullable : false})
     user_id : String;
@@ -23,29 +23,32 @@ export class Users {
     nickname : String;
 
     @Column({default: 0})
-    total_goal : Number;
+    total_goal : number;
 
     @Column({default: 0})
-    total_shoot : Number;
+    total_shoot : number;
 
     @Column({default: 0})
-    total_assist : Number;
+    total_assist : number;
     
     @Column({default: 0})
-    total_win : Number;
+    total_win : number;
     
     @Column({default: 0})
-    perfer_time : Number;
+    perfer_time : number;
 
     @Column({default: 0})
-    perfer_location : Number;
+    perfer_location : number;
     
     @Column({default: 0})
-    penalty : Number;
+    penalty : number;
     
     @Column({default: false})
     admin : Boolean;
     
+    @Column({default: 0})
+    total_game : number;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 

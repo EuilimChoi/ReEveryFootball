@@ -36,3 +36,23 @@ export class GroundInfoDto{
     @IsString()
     img : string;
 }
+
+export class ResultDto{
+    @IsNumber()
+    id : Number;
+
+    @IsNumber()
+    goal : Number;
+
+    @IsNumber()
+    shoot : Number;
+
+    @IsNumber()
+    assist : Number;
+
+    @IsNumber()
+    penalty : Number;
+
+    @IsNumber()
+    win : boolean;
+}
